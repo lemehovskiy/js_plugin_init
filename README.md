@@ -1,23 +1,23 @@
 ### Init project folder
 
 ```sh
-php wp-init.php --init {PROJECT_NAME_SLUG}
+php js_plugin_init.php --init {PROJECT_NAME_SLUG}
 ```
 
 ### Install
 
 ```sh
-php wp-init.php --install
+php js_plugin_init.php --install
 ```
 
 ### Install with destroy
 
 ```sh
-php wp-init.php --install --destroy
+php js_plugin_init.php --install --destroy
 ```
 
 ### Destroy
 
 ```sh
-php wp-init.php --destroy
+php js_plugin_init.php --destroy
 ```
