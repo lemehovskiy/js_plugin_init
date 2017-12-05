@@ -41,6 +41,15 @@ if (isset($options['init'])) {
 //        remove_starter_theme_files($config);
 
 
+        create_main_js_file($config);
+
+        create_gulp_file($config);
+
+        create_package_json($config);
+
+        create_readme_file($config);
+
+
 
 
 //        create_gitignore($config);
@@ -51,7 +60,7 @@ if (isset($options['init'])) {
 //        create_wp_config($config);
 //
 //        git_init($config);
-        
+
 
         if (isset($options['destroy'])) {
             remove_init_files();
@@ -64,6 +73,89 @@ if (isset($options['init'])) {
 }
 
 else {
+
+}
+
+
+function create_readme_file($config){
+    $search_fields = array(
+        '{PROJECT_NAME}'
+    );
+
+    $replace_with = array(
+        $config['project_name']
+    );
+
+
+    create_file_by_sample(array(
+        'sample_file' => "js_plugin_init_src/core/README.md",
+        'create_file' => 'README.md',
+        'search_field' => $search_fields,
+        'replace_field' => $replace_with
+    ));
+
+}
+
+
+function create_package_json($config){
+
+    $package_json = file_get_contents("js_plugin_init_src/core/package.json");
+
+    $package_config = json_decode($package_json, true);
+
+    $package_config['name'] = $config['project_name'];
+    $package_config['description'] = $config['project_description'];
+    $package_config['main'] = 'build/'. $config['project_name']. '.es6';
+    $package_config['keywords'] = $config['project_keywords'];
+    $package_config['repository']['url'] = 'https://github.com/lemehovskiy/'. $config['project_name'];
+
+    //create config file
+    $fp = fopen('package.json', 'w');
+    fwrite($fp, json_encode($package_config, JSON_PRETTY_PRINT));
+    fclose($fp);
+
+}
+
+
+function create_main_js_file($config){
+    $search_fields = array(
+        '{CLASS_NAME}',
+        '{JQUERY_FUNCTION_NAME}',
+        '{FUNCTION_NAME_UNDERSCORE}',
+    );
+
+    $replace_with = array(
+        $config['project_class'],
+        $config['jquery_function_name'],
+        $config['function_name_underscore']
+    );
+
+
+    create_file_by_sample(array(
+        'sample_file' => "js_plugin_init_src/core/plugin.es6",
+        'create_file' => 'src/' . $config['project_name'] . '.es6',
+        'search_field' => $search_fields,
+        'replace_field' => $replace_with
+    ));
+
+}
+
+function create_gulp_file($config){
+    $search_fields = array(
+        '{PROJECT_NAME}'
+    );
+
+    $replace_with = array(
+        $config['project_name']
+    );
+
+
+    create_file_by_sample(array(
+        'sample_file' => "js_plugin_init_src/core/gulpfile.js",
+        'create_file' => 'gulpfile.js',
+        'search_field' => $search_fields,
+        'replace_field' => $replace_with
+    ));
 
 }
 
@@ -222,7 +314,7 @@ function create_post_types($config)
     if (!isset($config['post_types'])) {
         return;
     }
-    
+
     foreach ($config['post_types'] as $post_type) {
 
         $post_type_slug_underscore = str_replace('-', '_', $post_type['slug']);
@@ -310,6 +402,9 @@ function create_project_folder($config)
 
         //copy init file
         system('cp -r js_plugin_init.php ' . $path);
+
+
+        echo 'Successfully init' ."\r\n";
     }
 
 }

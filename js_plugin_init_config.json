@@ -1,37 +1,45 @@
 {
-  "project_name": null,
-  "db_user": "",
-  "db_password": "",
+  "project_name": "wp_nav",
+
+  "project_class": "WpNav",
+  "jquery_function_name": "wpNav",
+  "function_name_underscore": "wp_nav",
+
+  "project_description": "jQuery WordPress navigation",
+  "project_keywords": [
+    "wordpress", "navigation", "jquery", "plugin", "greensock", "gsap"
+  ],
+
   "local-plugins": {
     "acf-repeater": {
-      "path": "wp-init-src/plugins/acf-repeater",
+      "path": "wp-init-src\/plugins\/acf-repeater",
       "install": true
     },
     "advanced-custom-fields-pro": {
-      "path": "wp-init-src/plugins/advanced-custom-fields-pro",
+      "path": "wp-init-src\/plugins\/advanced-custom-fields-pro",
       "install": true
     }
   },
   "remote-plugins": {
     "contact-form-7": {
-      "url": "https://downloads.wordpress.org/plugin/contact-form-7.4.9.zip",
+      "url": "https:\/\/downloads.wordpress.org\/plugin\/contact-form-7.4.9.zip",
       "install": true
     },
     "simple-custom-post-order": {
-      "url": "https://downloads.wordpress.org/plugin/simple-custom-post-order.zip",
+      "url": "https:\/\/downloads.wordpress.org\/plugin\/simple-custom-post-order.zip",
       "install": true
     }
   },
   "remove_wp_core_files": [
-    "wp-content/themes/twentyfifteen",
-    "wp-content/themes/twentyseventeen",
-    "wp-content/themes/twentysixteen",
-    "wp-content/plugins/akismet",
-    "wp-content/plugins/hello.php"
+    "wp-content\/themes\/twentyfifteen",
+    "wp-content\/themes\/twentyseventeen",
+    "wp-content\/themes\/twentysixteen",
+    "wp-content\/plugins\/akismet",
+    "wp-content\/plugins\/hello.php"
   ],
   "remove_starter_theme_files": [
-    "core/post_types/sample.php",
-    "core/taxonomies/sample.php",
+    "core\/post_types\/sample.php",
+    "core\/taxonomies\/sample.php",
     ".gitignore"
   ],
   "post_types": [
@@ -51,9 +59,9 @@
   ],
   "gitignore": [
     ".idea",
-    "**/build",
-    "**/node_modules",
-    "**/DS_Store",
+    "**\/build",
+    "**\/node_modules",
+    "**\/DS_Store",
     "wp-config.php"
   ],
   "flexible_templates": [

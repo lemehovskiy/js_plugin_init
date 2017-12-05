@@ -13,16 +13,14 @@
 (function ($) {
     'use strict';
 
-    class ClipCarousel {
+    class {CLASS_NAME} {
 
         constructor(element, options) {
 
             let self = this;
             
             self.settings = $.extend({
-                autoplay_speed: 1,
-                animate_duration: 1,
-                autoplay: true
+               
             }, options);
 
             let $element = $(element);
@@ -31,7 +29,7 @@
     }
 
 
-    $.fn.clipCarousel = function() {
+    $.fn.{JQUERY_FUNCTION_NAME} = function() {
         let $this = this,
             opt = arguments[0],
             args = Array.prototype.slice.call(arguments, 1),
@@ -40,9 +38,9 @@
             ret;
         for (i = 0; i < length; i++) {
             if (typeof opt == 'object' || typeof opt == 'undefined')
-                $this[i].clip_carousel = new ClipCarousel($this[i], opt);
+                $this[i].{FUNCTION_NAME_UNDERSCORE} = new {CLASS_NAME}($this[i], opt);
             else
-                ret = $this[i].clip_carousel[opt].apply($this[i].clip_carousel, args);
+                ret = $this[i].{FUNCTION_NAME_UNDERSCORE}[opt].apply($this[i].{FUNCTION_NAME_UNDERSCORE}, args);
             if (typeof ret != 'undefined') return ret;
         }
         return $this;
