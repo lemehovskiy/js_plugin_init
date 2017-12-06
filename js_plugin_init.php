@@ -27,18 +27,6 @@ if (isset($options['init'])) {
 } else if ($config['project_name'] != null) {
     if (isset($options['install'])) {
 
-//        dowload_wp_core();
-
-//        remove_files($config['remove_wp_core_files']);
-
-//        download_starter_theme($config);
-
-//        install_plugins($config);
-
-//        create_post_types($config);
-//        create_taxonomies($config);
-
-//        remove_starter_theme_files($config);
 
 
         create_main_js_file($config);
@@ -49,16 +37,8 @@ if (isset($options['init'])) {
 
         create_readme_file($config);
 
-
-
-
 //        create_gitignore($config);
-//
-//        create_flexible_templates($config);
-//        create_flexible_template_sections_files($config);
-//
-//        create_wp_config($config);
-//
+
 //        git_init($config);
 
 
