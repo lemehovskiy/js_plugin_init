@@ -38,16 +38,16 @@ if (isset($options['init'])) {
 
         create_gitignore($config);
 
-        git_init($config);
-
         create_demo_folder($config);
 
 
         if (isset($options['destroy'])) {
             remove_init_files();
+            git_init();
         }
     } else if (isset($options['destroy'])) {
         remove_init_files();
+        git_init();
     } else {
 
     }
