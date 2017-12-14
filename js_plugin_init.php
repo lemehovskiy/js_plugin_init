@@ -23,7 +23,10 @@ if (isset($options['init'])) {
 } else if ($config['project_name'] != null) {
     if (isset($options['install'])) {
 
-
+        if (!required_fields_validation($config)) {
+            echo 'Fill required config properties' ."\r\n";
+            return;
+        }
 
         create_main_js_file($config);
 
@@ -52,6 +55,36 @@ if (isset($options['init'])) {
 
 else {
 
+}
+
+function required_fields_validation($config){
+
+    if ($config['project_class'] == null) {
+        echo 'project_class is required property' ."\r\n";
+        return false;
+    }
+
+    if ($config['jquery_function_name'] == null) {
+        echo 'jquery_function_name is required property' ."\r\n";
+        return false;
+    }
+
+    if ($config['function_name_underscore'] == null) {
+        echo 'function_name_underscore is required property' ."\r\n";
+        return false;
+    }
+
+    if ($config['project_description'] == null) {
+        echo 'project_description is required property' ."\r\n";
+        return false;
+    }
+
+    if (empty($config['project_keywords'])) {
+        echo 'project_keywords is required property' ."\r\n";
+        return false;
+    }
+
+    return true;
 }
 
 function create_demo_folder($config){
