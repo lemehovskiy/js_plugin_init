@@ -15,10 +15,6 @@ $config_json = file_get_contents("js_plugin_init_config.json");
 $config = json_decode($config_json, true);
 
 
-//define("THEME_DIRECTORY", 'wp-content/themes/' . $config['project_name'] . '-theme');
-//define("PROJECT_NAME_UNDERSCORE",  str_replace('-', '_', $config['project_name']));
-
-
 if (isset($options['init'])) {
     $config['project_name'] = $options['init'];
 
@@ -37,9 +33,11 @@ if (isset($options['init'])) {
 
         create_readme_file($config);
 
-//        create_gitignore($config);
+        create_gitignore($config);
 
-//        git_init($config);
+        git_init($config);
+
+        create_demo_folder($config);
 
 
         if (isset($options['destroy'])) {
@@ -54,6 +52,38 @@ if (isset($options['init'])) {
 
 else {
 
+}
+
+function create_demo_folder($config){
+
+    create_folder('demo/imgs');
+    create_folder('demo/js');
+    create_folder('demo/sass');
+
+    system('cp -r js_plugin_init_src/demo/imgs ' . 'demo');
+    system('cp -r js_plugin_init_src/demo/js ' . 'demo');
+    system('cp -r js_plugin_init_src/demo/sass ' . 'demo');
+
+
+    $search_fields = array(
+        '{PROJECT_NAME}',
+        '{PROJECT_DESCRIPTION}',
+        '{PROJECT_KEYWORDS}'
+    );
+
+    $replace_with = array(
+        $config['project_name'],
+        $config['project_description'],
+        implode(" ", $config['project_keywords'])
+    );
+
+
+    create_file_by_sample(array(
+        'sample_file' => "js_plugin_init_src/demo/index.html",
+        'create_file' => 'demo/index.html',
+        'search_field' => $search_fields,
+        'replace_field' => $replace_with
+    ));
 }
 
 
@@ -193,160 +223,6 @@ function create_gitignore($config)
     $fp = fopen(".gitignore", 'w');
     fwrite($fp, $gitignore_string);
     fclose($fp);
-
-
-}
-
-
-function remove_starter_theme_files($config)
-{
-
-    $full_paths = array();
-
-    foreach ($config['remove_starter_theme_files'] as $file) {
-        $full_paths[] = THEME_DIRECTORY . '/' . $file;
-    }
-
-    remove_files($full_paths);
-}
-
-
-function include_taxonomies_to_core($config)
-{
-
-    $taxonomy_path_string = "// TAXONOMIES";
-
-    foreach ($config['taxonomies'] as $taxonomy) {
-        $taxonomy_slug_underscore = str_replace('-', '_', $taxonomy['slug']);
-
-        $taxonomy_path_string .= "\n" . 'include("taxonomies/register_taxonomy_' . $taxonomy_slug_underscore . '.php");';
-
-    }
-
-    $file = file_get_contents(THEME_DIRECTORY . "/core/core.php");
-    $file = str_replace('// TAXONOMIES', $taxonomy_path_string, $file);
-    file_put_contents(THEME_DIRECTORY . "/core/core.php", $file);
-
-}
-
-function include_post_types_to_core($config)
-{
-
-    $post_type_path_string = "// POST TYPES";
-
-    foreach ($config['post_types'] as $post_type) {
-        $taxonomy_slug_underscore = str_replace('-', '_', $post_type['slug']);
-
-        $post_type_path_string .= "\n" . 'include("post_types/register_post_type_' . $taxonomy_slug_underscore . '.php");';
-
-    }
-
-    $file = file_get_contents(THEME_DIRECTORY . "/core/core.php");
-    $file = str_replace('// POST TYPES', $post_type_path_string, $file);
-    file_put_contents(THEME_DIRECTORY . "/core/core.php", $file);
-
-}
-
-function create_taxonomies($config)
-{
-
-    if (!isset($config['taxonomies'])) {
-        return;
-    }
-
-    foreach ($config['taxonomies'] as $taxonomy) {
-
-        $taxonomy_slug_underscore = str_replace('-', '_', $taxonomy['slug']);
-
-        $searchF = array(
-            '{TAXONOMY_SLUG}',
-            '{TAXONOMY_NAME}',
-            '{TAXONOMY_SINGULAR_NAME}',
-            '{ASSIGN_TO_POST_TYPE}',
-            '{TAXONOMY_SLUG_UNDERSCORE}'
-        );
-
-        $replaceW = array(
-            $taxonomy['slug'],
-            $taxonomy['name'],
-            $taxonomy['singular_name'],
-            $taxonomy['assign_to_post_type'],
-            $taxonomy_slug_underscore
-        );
-
-
-        create_file_by_sample(array(
-            'sample_file' => "wp-init-src/core/register_taxonomy.php",
-            'create_file' => THEME_DIRECTORY . '/core/taxonomies/register_taxonomy_' . $taxonomy_slug_underscore . '.php',
-            'search_field' => $searchF,
-            'replace_field' => $replaceW
-        ));
-
-    }
-
-    include_taxonomies_to_core($config);
-
-}
-
-function create_post_types($config)
-{
-
-    if (!isset($config['post_types'])) {
-        return;
-    }
-
-    foreach ($config['post_types'] as $post_type) {
-
-        $post_type_slug_underscore = str_replace('-', '_', $post_type['slug']);
-
-        $searchF = array(
-            '{POST_TYPE_SLUG}',
-            '{POST_TYPE_NAME}',
-            '{POST_TYPE_SINGULAR_NAME}',
-            '{POST_TYPE_SLUG_UNDERSCORE}'
-        );
-
-        $replaceW = array(
-            $post_type['slug'],
-            $post_type['name'],
-            $post_type['singular_name'],
-            $post_type_slug_underscore
-        );
-
-        create_file_by_sample(array(
-            'sample_file' => "wp-init-src/core/register_post_type.php",
-            'create_file' => THEME_DIRECTORY . '/core/post_types/register_post_type_' . $post_type_slug_underscore . '.php',
-            'search_field' => $searchF,
-            'replace_field' => $replaceW
-        ));
-
-    }
-
-    include_post_types_to_core($config);
-
-}
-
-function install_plugins($config)
-{
-    //copy local plugins
-    foreach ($config['local-plugins'] as $plugin) {
-        if ($plugin['install']) {
-            system('cp -r ' . $plugin['path'] . ' ' . 'wp-content/plugins');
-        }
-    }
-
-    //download remote plugins
-    foreach ($config['remote-plugins'] as $plugin) {
-        if ($plugin['install']) {
-
-            //download
-            system('curl -L -o remote-plugin.zip ' . $plugin['url']);
-
-            //extract and remove
-            system('tar -xvf remote-plugin.zip --directory wp-content/plugins && rm remote-plugin.zip');
-
-        }
-    }
 }
 
 
