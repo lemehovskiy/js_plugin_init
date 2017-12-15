@@ -148,7 +148,7 @@ function create_package_json($config){
 
     $package_config['name'] = $config['project_name'];
     $package_config['description'] = $config['project_description'];
-    $package_config['main'] = 'build/'. $config['project_name']. '.es6';
+    $package_config['main'] = 'build/'. $config['project_name']. '.js';
     $package_config['keywords'] = $config['project_keywords'];
     $package_config['repository']['url'] = 'https://github.com/lemehovskiy/'. $config['project_name'];
 
