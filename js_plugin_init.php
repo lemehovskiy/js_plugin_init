@@ -217,7 +217,7 @@ function create_webpack_file($config){
 
     create_file_by_sample(array(
         'sample_file' => "js_plugin_init_src/core/webpack.config.js",
-        'create_file' => 'gulpfile.js',
+        'create_file' => 'webpack.config.js',
         'search_field' => $search_fields,
         'replace_field' => $replace_with
     ));
