@@ -30,9 +30,11 @@ if (isset($options['init'])) {
 
         create_main_js_file($config);
 
-        create_gulp_file($config);
+        create_webpack_file($config);
 
-        create_package_json($config);
+        create_core_package_json($config);
+
+        create_demo_package_json($config);
 
         create_readme_file($config);
 
@@ -90,12 +92,13 @@ function required_fields_validation($config){
 function create_demo_folder($config){
 
     create_folder('demo/imgs');
-    create_folder('demo/js');
     create_folder('demo/sass');
 
     system('cp -r js_plugin_init_src/demo/imgs ' . 'demo');
-    system('cp -r js_plugin_init_src/demo/js ' . 'demo');
     system('cp -r js_plugin_init_src/demo/sass ' . 'demo');
+
+    system('cp js_plugin_init_src/demo/webpack.config.js ' . 'demo');
+    system('cp js_plugin_init_src/demo/index.es6 ' . 'demo');
 
 
     $search_fields = array(
@@ -140,7 +143,7 @@ function create_readme_file($config){
 }
 
 
-function create_package_json($config){
+function create_core_package_json($config){
 
     $package_json = file_get_contents("js_plugin_init_src/core/package.json");
 
@@ -154,6 +157,25 @@ function create_package_json($config){
 
     //create config file
     $fp = fopen('package.json', 'w');
+    fwrite($fp, json_encode($package_config, JSON_PRETTY_PRINT));
+    fclose($fp);
+
+}
+
+function create_demo_package_json($config){
+
+    $package_json = file_get_contents("js_plugin_init_src/demo/package.json");
+
+    $package_config = json_decode($package_json, true);
+
+    $package_config['name'] = $config['project_name'] . '_demo';
+    $package_config['description'] = $config['project_description'];
+    $package_config['main'] = 'build/'. $config['project_name']. '.js';
+    $package_config['keywords'] = $config['project_keywords'];
+    $package_config['repository']['url'] = 'https://github.com/lemehovskiy/'. $config['project_name'];
+
+    //create config file
+    $fp = fopen('demo/package.json', 'w');
     fwrite($fp, json_encode($package_config, JSON_PRETTY_PRINT));
     fclose($fp);
 
@@ -183,7 +205,7 @@ function create_main_js_file($config){
 
 }
 
-function create_gulp_file($config){
+function create_webpack_file($config){
     $search_fields = array(
         '{PROJECT_NAME}'
     );
@@ -194,7 +216,7 @@ function create_gulp_file($config){
 
 
     create_file_by_sample(array(
-        'sample_file' => "js_plugin_init_src/core/gulpfile.js",
+        'sample_file' => "js_plugin_init_src/core/webpack.config.js",
         'create_file' => 'gulpfile.js',
         'search_field' => $search_fields,
         'replace_field' => $replace_with
