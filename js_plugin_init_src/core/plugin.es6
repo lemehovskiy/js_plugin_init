@@ -10,7 +10,7 @@ class {CLASS_NAME} {
 
         }, options);
 
-        let $element = $(element);
+        self.$element = $(element);
 
     }
 }
