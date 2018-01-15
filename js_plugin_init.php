@@ -175,6 +175,8 @@ function create_demo_package_json($config){
     $package_config['repository']['url'] = 'https://github.com/lemehovskiy/'. $config['project_name'];
 
     //create config file
+    create_folder('demo');
+
     $fp = fopen('demo/package.json', 'w');
     fwrite($fp, json_encode($package_config, JSON_PRETTY_PRINT));
     fclose($fp);
@@ -187,12 +189,14 @@ function create_main_js_file($config){
         '{CLASS_NAME}',
         '{JQUERY_FUNCTION_NAME}',
         '{FUNCTION_NAME_UNDERSCORE}',
+        '{REPO_URL}'
     );
 
     $replace_with = array(
         $config['project_class'],
         $config['jquery_function_name'],
-        $config['function_name_underscore']
+        $config['function_name_underscore'],
+        'https://github.com/lemehovskiy/'. $config['project_name']
     );
 
 
