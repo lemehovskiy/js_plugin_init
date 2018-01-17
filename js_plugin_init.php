@@ -189,14 +189,16 @@ function create_main_js_file($config){
         '{CLASS_NAME}',
         '{JQUERY_FUNCTION_NAME}',
         '{FUNCTION_NAME_UNDERSCORE}',
-        '{REPO_URL}'
+        '{REPO_URL}',
+        '{PROJECT_NAME_DASHED}'
     );
 
     $replace_with = array(
         $config['project_class'],
         $config['jquery_function_name'],
         $config['function_name_underscore'],
-        'https://github.com/lemehovskiy/'. $config['project_name']
+        'https://github.com/lemehovskiy/'. $config['project_name'],
+        $config['project_name_dashed']
     );
 
 

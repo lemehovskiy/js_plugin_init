@@ -14,10 +14,18 @@
         constructor(element, options) {
 
             let self = this;
-
-            self.settings = $.extend({
-
+            
+            //extend by function call
+            self.settings = $.extend(true, {
+               
+                test_property: false
+                
             }, options);
+
+
+            //extend by data options
+            self.data_options = self.$element.data('{PROJECT_NAME_DASHED}');
+            self.settings = $.extend(true, self.settings, self.data_options);
 
             self.$element = $(element);
 
