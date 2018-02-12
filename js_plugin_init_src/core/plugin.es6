@@ -22,12 +22,11 @@
                 
             }, options);
 
+            self.$element = $(element);
 
             //extend by data options
             self.data_options = self.$element.data('{PROJECT_NAME_DASHED}');
             self.settings = $.extend(true, self.settings, self.data_options);
-
-            self.$element = $(element);
 
         }
     }
