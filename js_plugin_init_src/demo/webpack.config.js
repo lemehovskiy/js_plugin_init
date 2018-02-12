@@ -83,7 +83,13 @@ module.exports = {
         ]
     },
 
-    devtool: NODE_ENV == 'development' ? "source-map" : false
+    devtool: NODE_ENV == 'development' ? "source-map" : false,
+
+    resolve: {
+        alias: {
+            jquery: "jquery/src/jquery"
+        }
+    }
 
 };
 
