@@ -1,6 +1,7 @@
 const autoprefixer = require('autoprefixer');
 const NODE_ENV = process.env.NODE_ENV || "development";
 const webpack = require('webpack');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
 
@@ -16,7 +17,8 @@ module.exports = {
     plugins: [
         new webpack.DefinePlugin({
             NODE_ENV: JSON.stringify(NODE_ENV)
-        })
+        }),
+        new ExtractTextPlugin("/build/style.css")
     ],
 
     module: {
