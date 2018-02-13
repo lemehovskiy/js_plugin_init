@@ -1,6 +1,7 @@
 const autoprefixer = require('autoprefixer');
 const NODE_ENV = process.env.NODE_ENV || "development";
 const webpack = require('webpack');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
 
@@ -9,15 +10,15 @@ module.exports = {
     entry: ['./index.es6'],
 
     output: {
-        path: __dirname + '/build',
-        filename: 'app.js'
+        filename: './build/app.js'
     },
 
 
     plugins: [
         new webpack.DefinePlugin({
             NODE_ENV: JSON.stringify(NODE_ENV)
-        })
+        }),
+        new ExtractTextPlugin("/build/style.css")
     ],
 
     module: {
@@ -84,9 +85,10 @@ module.exports = {
 
     devtool: NODE_ENV == 'development' ? "source-map" : false,
 
-
-    externals: {
-        "jquery": "jQuery"
+    resolve: {
+        alias: {
+            jquery: "jquery/src/jquery"
+        }
     }
 
 };
