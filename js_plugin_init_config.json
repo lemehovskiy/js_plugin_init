@@ -6,6 +6,9 @@
   "function_name_underscore": null,
   "project_name_dashed": null,
 
+  "demo_folder": false,
+  "test_folder": false,
+
   "project_description": null,
   "project_keywords": ["jQuery", "plugin"],
 

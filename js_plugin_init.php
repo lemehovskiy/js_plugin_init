@@ -34,11 +34,10 @@ if (isset($options['init'])) {
 
         create_core_package_json($config);
 
-        create_demo_package_json($config);
-
         create_readme_file($config);
 
         create_gitignore($config);
+
 
         create_demo_folder($config);
 
@@ -89,7 +88,42 @@ function required_fields_validation($config){
     return true;
 }
 
+function create_test_folder($config){
+    create_test_package_json($config);
+
+    create_folder('test/imgs');
+    create_folder('test/sass');
+
+    system('cp -r js_plugin_init_src/test/imgs ' . 'test');
+    system('cp -r js_plugin_init_src/test/sass ' . 'test');
+
+    system('cp js_plugin_init_src/test/webpack.config.js ' . 'test');
+    system('cp js_plugin_init_src/test/index.es6 ' . 'test');
+
+
+    $search_fields = array(
+        '{PROJECT_NAME}',
+        '{PROJECT_DESCRIPTION}',
+        '{PROJECT_KEYWORDS}'
+    );
+
+    $replace_with = array(
+        $config['project_name'],
+        $config['project_description'],
+        implode(" ", $config['project_keywords'])
+    );
+
+
+    create_file_by_sample(array(
+        'sample_file' => "js_plugin_init_src/test/index.html",
+        'create_file' => 'test/index.html',
+        'search_field' => $search_fields,
+        'replace_field' => $replace_with
+    ));
+}
+
 function create_demo_folder($config){
+    create_demo_package_json($config);
 
     create_folder('demo/imgs');
     create_folder('demo/sass');
@@ -121,6 +155,7 @@ function create_demo_folder($config){
         'replace_field' => $replace_with
     ));
 }
+
 
 
 function create_readme_file($config){
@@ -178,6 +213,27 @@ function create_demo_package_json($config){
     create_folder('demo');
 
     $fp = fopen('demo/package.json', 'w');
+    fwrite($fp, json_encode($package_config, JSON_PRETTY_PRINT));
+    fclose($fp);
+
+}
+
+function create_test_package_json($config){
+
+    $package_json = file_get_contents("js_plugin_init_src/test/package.json");
+
+    $package_config = json_decode($package_json, true);
+
+    $package_config['name'] = $config['project_name'] . '_test';
+    $package_config['description'] = $config['project_description'];
+    $package_config['main'] = 'build/'. $config['project_name']. '.js';
+    $package_config['keywords'] = $config['project_keywords'];
+    $package_config['repository']['url'] = 'https://github.com/lemehovskiy/'. $config['project_name'];
+
+    //create config file
+    create_folder('test');
+
+    $fp = fopen('test/package.json', 'w');
     fwrite($fp, json_encode($package_config, JSON_PRETTY_PRINT));
     fclose($fp);
 
