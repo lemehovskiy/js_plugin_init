@@ -24,7 +24,7 @@ if (isset($options['init'])) {
     if (isset($options['install'])) {
 
         if (!required_fields_validation($config)) {
-            echo 'Fill required config properties' ."\r\n";
+            echo 'Fill required config properties' . "\r\n";
             return;
         }
 
@@ -39,8 +39,13 @@ if (isset($options['init'])) {
         create_gitignore($config);
 
 
-        create_demo_folder($config);
+        if ($config['demo_folder']) {
+            create_demo_folder($config);
+        }
 
+        if ($config['test_folder']) {
+            create_test_folder($config);
+        }
 
         if (isset($options['destroy'])) {
             remove_init_files();
@@ -49,46 +54,42 @@ if (isset($options['init'])) {
     } else if (isset($options['destroy'])) {
         remove_init_files();
         git_init();
-    } else {
-
     }
 }
 
-else {
-
-}
-
-function required_fields_validation($config){
+function required_fields_validation($config)
+{
 
     if ($config['project_class'] == null) {
-        echo 'project_class is required property' ."\r\n";
+        echo 'project_class is required property' . "\r\n";
         return false;
     }
 
     if ($config['jquery_function_name'] == null) {
-        echo 'jquery_function_name is required property' ."\r\n";
+        echo 'jquery_function_name is required property' . "\r\n";
         return false;
     }
 
     if ($config['function_name_underscore'] == null) {
-        echo 'function_name_underscore is required property' ."\r\n";
+        echo 'function_name_underscore is required property' . "\r\n";
         return false;
     }
 
     if ($config['project_description'] == null) {
-        echo 'project_description is required property' ."\r\n";
+        echo 'project_description is required property' . "\r\n";
         return false;
     }
 
     if (empty($config['project_keywords'])) {
-        echo 'project_keywords is required property' ."\r\n";
+        echo 'project_keywords is required property' . "\r\n";
         return false;
     }
 
     return true;
 }
 
-function create_test_folder($config){
+function create_test_folder($config)
+{
     create_test_package_json($config);
 
     create_folder('test/imgs');
@@ -122,7 +123,8 @@ function create_test_folder($config){
     ));
 }
 
-function create_demo_folder($config){
+function create_demo_folder($config)
+{
     create_demo_package_json($config);
 
     create_folder('demo/imgs');
@@ -157,8 +159,8 @@ function create_demo_folder($config){
 }
 
 
-
-function create_readme_file($config){
+function create_readme_file($config)
+{
     $search_fields = array(
         '{PROJECT_NAME}'
     );
@@ -178,7 +180,8 @@ function create_readme_file($config){
 }
 
 
-function create_core_package_json($config){
+function create_core_package_json($config)
+{
 
     $package_json = file_get_contents("js_plugin_init_src/core/package.json");
 
@@ -186,9 +189,9 @@ function create_core_package_json($config){
 
     $package_config['name'] = $config['project_name'];
     $package_config['description'] = $config['project_description'];
-    $package_config['main'] = 'build/'. $config['project_name']. '.js';
+    $package_config['main'] = 'build/' . $config['project_name'] . '.js';
     $package_config['keywords'] = $config['project_keywords'];
-    $package_config['repository']['url'] = 'https://github.com/lemehovskiy/'. $config['project_name'];
+    $package_config['repository']['url'] = 'https://github.com/lemehovskiy/' . $config['project_name'];
 
     //create config file
     $fp = fopen('package.json', 'w');
@@ -197,7 +200,8 @@ function create_core_package_json($config){
 
 }
 
-function create_demo_package_json($config){
+function create_demo_package_json($config)
+{
 
     $package_json = file_get_contents("js_plugin_init_src/demo/package.json");
 
@@ -205,9 +209,9 @@ function create_demo_package_json($config){
 
     $package_config['name'] = $config['project_name'] . '_demo';
     $package_config['description'] = $config['project_description'];
-    $package_config['main'] = 'build/'. $config['project_name']. '.js';
+    $package_config['main'] = 'build/' . $config['project_name'] . '.js';
     $package_config['keywords'] = $config['project_keywords'];
-    $package_config['repository']['url'] = 'https://github.com/lemehovskiy/'. $config['project_name'];
+    $package_config['repository']['url'] = 'https://github.com/lemehovskiy/' . $config['project_name'];
 
     //create config file
     create_folder('demo');
@@ -218,7 +222,8 @@ function create_demo_package_json($config){
 
 }
 
-function create_test_package_json($config){
+function create_test_package_json($config)
+{
 
     $package_json = file_get_contents("js_plugin_init_src/test/package.json");
 
@@ -226,9 +231,9 @@ function create_test_package_json($config){
 
     $package_config['name'] = $config['project_name'] . '_test';
     $package_config['description'] = $config['project_description'];
-    $package_config['main'] = 'build/'. $config['project_name']. '.js';
+    $package_config['main'] = 'build/' . $config['project_name'] . '.js';
     $package_config['keywords'] = $config['project_keywords'];
-    $package_config['repository']['url'] = 'https://github.com/lemehovskiy/'. $config['project_name'];
+    $package_config['repository']['url'] = 'https://github.com/lemehovskiy/' . $config['project_name'];
 
     //create config file
     create_folder('test');
@@ -240,7 +245,8 @@ function create_test_package_json($config){
 }
 
 
-function create_main_js_file($config){
+function create_main_js_file($config)
+{
     $search_fields = array(
         '{CLASS_NAME}',
         '{JQUERY_FUNCTION_NAME}',
@@ -253,7 +259,7 @@ function create_main_js_file($config){
         $config['project_class'],
         $config['jquery_function_name'],
         $config['function_name_underscore'],
-        'https://github.com/lemehovskiy/'. $config['project_name'],
+        'https://github.com/lemehovskiy/' . $config['project_name'],
         $config['project_name_dashed']
     );
 
@@ -267,7 +273,8 @@ function create_main_js_file($config){
 
 }
 
-function create_webpack_file($config){
+function create_webpack_file($config)
+{
     $search_fields = array(
         '{PROJECT_NAME}'
     );
@@ -286,12 +293,12 @@ function create_webpack_file($config){
 
 }
 
-function create_file_by_sample($settings){
+function create_file_by_sample($settings)
+{
 
     $dirname = dirname($settings['create_file']);
 
-    if (!is_dir($dirname))
-    {
+    if (!is_dir($dirname)) {
         mkdir($dirname, 0755, true);
     }
 
@@ -305,14 +312,16 @@ function create_file_by_sample($settings){
 }
 
 
-function create_folder($path){
+function create_folder($path)
+{
     if (!is_dir($path)) {
         mkdir($path, 0777, true);
     }
 }
 
 
-function git_init(){
+function git_init()
+{
     system('git init');
     system('git add .');
     system('git commit -m "init"');
@@ -343,14 +352,12 @@ function create_gitignore($config)
 }
 
 
-
 function remove_files($files)
 {
     foreach ($files as $file) {
         system('rm -rf ' . $file);
     }
 }
-
 
 
 function create_project_folder($config)
@@ -377,7 +384,7 @@ function create_project_folder($config)
         system('cp -r js_plugin_init.php ' . $path);
 
 
-        echo 'Successfully init' ."\r\n";
+        echo 'Successfully init' . "\r\n";
     }
 
 }
