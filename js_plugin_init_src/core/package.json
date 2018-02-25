@@ -4,6 +4,7 @@
   "description": "project_description",
   "main": "project_main_file",
   "dependencies": {
+    "jquery": "^3.2.1"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
