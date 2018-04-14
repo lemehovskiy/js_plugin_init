@@ -219,7 +219,7 @@ function create_core_package_json($config)
     $package_config['description'] = $config['project_description'];
     $package_config['main'] = 'build/' . $config['project_name'] . '.js';
     $package_config['keywords'] = $config['project_keywords'];
-    $package_config['repository']['url'] = 'https://github.com/lemehovskiy/' . $config['project_name'];
+    $package_config['repository']['url'] = $config['github_url'] . '/' . $config['project_name'];
 
     //create config file
     $fp = fopen('package.json', 'w');
@@ -240,7 +240,7 @@ function create_test_package_json($config)
     $package_config['description'] = $config['project_description'];
     $package_config['main'] = 'build/' . $config['project_name'] . '.js';
     $package_config['keywords'] = $config['project_keywords'];
-    $package_config['repository']['url'] = 'https://github.com/lemehovskiy/' . $config['project_name'];
+    $package_config['repository']['url'] = $config['github_url'] . '/' . $config['project_name'];
 
     //create config file
     create_folder('test');
