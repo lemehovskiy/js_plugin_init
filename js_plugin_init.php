@@ -39,21 +39,25 @@ if (isset($options['init'])) {
         create_gitignore($config);
 
 
-        if ($config['demo_folder']) {
-            create_demo_folder($config);
+        switch ($config['plugin_type']) {
+            case 'canvas':
+
+                create_canvas_test_folder($config);
+                break;
+
+            default:
+                create_default_test_folder($config);
+                break;
         }
 
-        if ($config['test_folder']) {
-            create_test_folder($config);
-        }
 
         if (isset($options['destroy'])) {
             remove_init_files();
-            git_init();
+            git_init($config);
         }
     } else if (isset($options['destroy'])) {
         remove_init_files();
-        git_init();
+        git_init($config);
     }
 }
 
@@ -70,8 +74,8 @@ function required_fields_validation($config)
         return false;
     }
 
-    if ($config['function_name_underscore'] == null) {
-        echo 'function_name_underscore is required property' . "\r\n";
+    if ($config['project_name_underscore'] == null) {
+        echo 'project_name_underscore is required property' . "\r\n";
         return false;
     }
 
@@ -88,18 +92,18 @@ function required_fields_validation($config)
     return true;
 }
 
-function create_test_folder($config)
+function create_default_test_folder($config)
 {
     create_test_package_json($config);
 
     create_folder('test/imgs');
     create_folder('test/sass');
 
-    system('cp -r js_plugin_init_src/test/imgs ' . 'test');
-    system('cp -r js_plugin_init_src/test/sass ' . 'test');
+    system('cp -r js_plugin_init_src/default_project/test/imgs ' . 'test');
+    system('cp -r js_plugin_init_src/default_project/test/sass ' . 'test');
 
-    system('cp js_plugin_init_src/test/webpack.config.js ' . 'test');
-    system('cp js_plugin_init_src/test/index.es6 ' . 'test');
+    system('cp js_plugin_init_src/default_project/test/webpack.config.js ' . 'test');
+    system('cp js_plugin_init_src/default_project/test/index.es6 ' . 'test');
 
 
     $search_fields = array(
@@ -116,48 +120,72 @@ function create_test_folder($config)
 
 
     create_file_by_sample(array(
-        'sample_file' => "js_plugin_init_src/test/index.html",
+        'sample_file' => "js_plugin_init_src/default_project/test/index.html",
         'create_file' => 'test/index.html',
         'search_field' => $search_fields,
         'replace_field' => $replace_with
     ));
-}
-
-function create_demo_folder($config)
-{
-    create_demo_package_json($config);
-
-    create_folder('demo/imgs');
-    create_folder('demo/sass');
-
-    system('cp -r js_plugin_init_src/demo/imgs ' . 'demo');
-    system('cp -r js_plugin_init_src/demo/sass ' . 'demo');
-
-    system('cp js_plugin_init_src/demo/webpack.config.js ' . 'demo');
-    system('cp js_plugin_init_src/demo/index.es6 ' . 'demo');
-
-
-    $search_fields = array(
-        '{PROJECT_NAME}',
-        '{PROJECT_DESCRIPTION}',
-        '{PROJECT_KEYWORDS}'
-    );
-
-    $replace_with = array(
-        $config['project_name'],
-        $config['project_description'],
-        implode(" ", $config['project_keywords'])
-    );
-
 
     create_file_by_sample(array(
-        'sample_file' => "js_plugin_init_src/demo/index.html",
-        'create_file' => 'demo/index.html',
-        'search_field' => $search_fields,
-        'replace_field' => $replace_with
+        'sample_file' => "js_plugin_init_src/default_project/test/index.es6",
+        'create_file' => 'test/index.es6',
+        'search_field' => array(
+            '{PLUGIN_SLUG_UNDERSCORE}',
+            '{PROJECT_NAME_DASHED}',
+            '{JQUERY_FUNCTION_NAME}'
+        ),
+        'replace_field' => array(
+            $config['project_name_underscore'],
+            $config['project_name_dashed'],
+            $config['jquery_function_name']
+        )
     ));
 }
 
+function create_canvas_test_folder($config)
+{
+    create_test_package_json($config);
+
+    create_folder('test/sass');
+
+    system('cp -r js_plugin_init_src/default_project/test/sass ' . 'test');
+
+    system('cp js_plugin_init_src/default_project/test/webpack.config.js ' . 'test');
+
+
+    create_file_by_sample(array(
+        'sample_file' => "js_plugin_init_src/canvas_project/test/index.es6",
+        'create_file' => 'test/index.es6',
+        'search_field' => array(
+            '{PLUGIN_SLUG_UNDERSCORE}',
+            '{PROJECT_NAME_DASHED}',
+            '{JQUERY_FUNCTION_NAME}'
+        ),
+        'replace_field' => array(
+            $config['project_name_underscore'],
+            $config['project_name_dashed'],
+            $config['jquery_function_name']
+        )
+    ));
+
+
+    create_file_by_sample(array(
+        'sample_file' => "js_plugin_init_src/canvas_project/test/index.html",
+        'create_file' => 'test/index.html',
+        'search_field' => array(
+            '{PROJECT_NAME}',
+            '{PROJECT_DESCRIPTION}',
+            '{PROJECT_KEYWORDS}',
+            '{PROJECT_SLUG_DASHED}'
+        ),
+        'replace_field' => array(
+            $config['project_name'],
+            $config['project_description'],
+            implode(" ", $config['project_keywords']),
+            $config['project_name_dashed'],
+        )
+    ));
+}
 
 function create_readme_file($config)
 {
@@ -171,7 +199,7 @@ function create_readme_file($config)
 
 
     create_file_by_sample(array(
-        'sample_file' => "js_plugin_init_src/core/README.md",
+        'sample_file' => "js_plugin_init_src/default_project/core/README.md",
         'create_file' => 'README.md',
         'search_field' => $search_fields,
         'replace_field' => $replace_with
@@ -183,7 +211,7 @@ function create_readme_file($config)
 function create_core_package_json($config)
 {
 
-    $package_json = file_get_contents("js_plugin_init_src/core/package.json");
+    $package_json = file_get_contents("js_plugin_init_src/default_project/core/package.json");
 
     $package_config = json_decode($package_json, true);
 
@@ -200,32 +228,11 @@ function create_core_package_json($config)
 
 }
 
-function create_demo_package_json($config)
-{
-
-    $package_json = file_get_contents("js_plugin_init_src/demo/package.json");
-
-    $package_config = json_decode($package_json, true);
-
-    $package_config['name'] = $config['project_name'] . '_demo';
-    $package_config['description'] = $config['project_description'];
-    $package_config['main'] = 'build/' . $config['project_name'] . '.js';
-    $package_config['keywords'] = $config['project_keywords'];
-    $package_config['repository']['url'] = 'https://github.com/lemehovskiy/' . $config['project_name'];
-
-    //create config file
-    create_folder('demo');
-
-    $fp = fopen('demo/package.json', 'w');
-    fwrite($fp, json_encode($package_config, JSON_PRETTY_PRINT));
-    fclose($fp);
-
-}
 
 function create_test_package_json($config)
 {
 
-    $package_json = file_get_contents("js_plugin_init_src/test/package.json");
+    $package_json = file_get_contents("js_plugin_init_src/default_project/test/package.json");
 
     $package_config = json_decode($package_json, true);
 
@@ -247,6 +254,14 @@ function create_test_package_json($config)
 
 function create_main_js_file($config)
 {
+
+    $sample_file = "js_plugin_init_src/default_project/core/plugin.es6";
+
+    if ($config["plugin_type"] == "canvas") {
+        $sample_file = "js_plugin_init_src/canvas_project/core/plugin.es6";
+    }
+
+
     $search_fields = array(
         '{CLASS_NAME}',
         '{JQUERY_FUNCTION_NAME}',
@@ -258,14 +273,14 @@ function create_main_js_file($config)
     $replace_with = array(
         $config['project_class'],
         $config['jquery_function_name'],
-        $config['function_name_underscore'],
+        $config['project_name_underscore'],
         'https://github.com/lemehovskiy/' . $config['project_name'],
         $config['project_name_dashed']
     );
 
 
     create_file_by_sample(array(
-        'sample_file' => "js_plugin_init_src/core/plugin.es6",
+        'sample_file' => $sample_file,
         'create_file' => 'src/' . $config['project_name'] . '.es6',
         'search_field' => $search_fields,
         'replace_field' => $replace_with
@@ -285,7 +300,7 @@ function create_webpack_file($config)
 
 
     create_file_by_sample(array(
-        'sample_file' => "js_plugin_init_src/core/webpack.config.js",
+        'sample_file' => "js_plugin_init_src/default_project/core/webpack.config.js",
         'create_file' => 'webpack.config.js',
         'search_field' => $search_fields,
         'replace_field' => $replace_with
@@ -320,11 +335,12 @@ function create_folder($path)
 }
 
 
-function git_init()
+function git_init($config)
 {
     system('git init');
     system('git add .');
     system('git commit -m "init"');
+    system('git remote add origin'. $config['github_url'] .'/'. $config['project_name_underscore'] .'.git');
 }
 
 

@@ -3,18 +3,19 @@
 
   "project_class": null,
   "jquery_function_name": null,
-  "function_name_underscore": null,
+  "project_name_underscore": null,
   "project_name_dashed": null,
 
-  "demo_folder": false,
-  "test_folder": false,
+  "plugin_type": "default",
 
-  "project_description": null,
+  "project_description": "jQuery plugin",
   "project_keywords": ["jQuery", "plugin"],
 
   "gitignore": [
     ".idea",
     "**\/node_modules",
     "**\/DS_Store"
-  ]
+  ],
+
+  "github_url": "https://github.com/lemehovskiy"
 }

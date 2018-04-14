@@ -2,12 +2,9 @@ require("./sass/style.scss");
 
 require ("jquery");
 
-if (NODE_ENV == 'development') {
-    console.log('NODE_ENV == dev');
-}
+require('../build/{PLUGIN_SLUG_UNDERSCORE}.js');
 
 
 $(document).ready(function () {
-
 
 });
