@@ -77,9 +77,48 @@
 
             self.context.rect(20,20,150,100);
             self.context.stroke();
+
+            self.loop();
+
         }
 
         on_resize() {
+
+        }
+
+        update() {
+            let self = this;
+
+
+        }
+
+        clear() {
+            let self = this;
+
+            self.context.clearRect(0, 0, innerWidth, innerHeight);
+        }
+
+
+        render() {
+
+            let self = this;
+
+            let canvas_center_x = self.canvas.width / 2;
+            let canvas_center_y = self.canvas.height / 2;
+
+        }
+
+        loop() {
+
+            let self = this;
+
+            self.clear();
+            self.update();
+            self.render();
+
+            window.requestAnimFrame(function(){
+                self.loop();
+            });
 
         }
     }
