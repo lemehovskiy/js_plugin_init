@@ -148,7 +148,7 @@ function create_canvas_test_folder($config)
 
     create_folder('test/sass');
 
-    system('cp -r js_plugin_init_src/default_project/test/sass ' . 'test');
+    system('cp -r js_plugin_init_src/canvas_project/test/sass ' . 'test');
 
     system('cp js_plugin_init_src/default_project/test/webpack.config.js ' . 'test');
 
