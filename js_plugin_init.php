@@ -340,7 +340,7 @@ function git_init($config)
     system('git init');
     system('git add .');
     system('git commit -m "init"');
-    system('git remote add origin'. $config['github_url'] .'/'. $config['project_name_underscore'] .'.git');
+    system('git remote add origin '. $config['github_url'] .'/'. $config['project_name_underscore'] .'.git');
 }
 
 
