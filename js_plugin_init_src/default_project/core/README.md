@@ -3,7 +3,7 @@
 
 ### Demo
 
-[https://lemehovskiy.github.io/{PROJECT_NAME}/demo](https://lemehovskiy.github.io/{PROJECT_NAME}/demo/)
+[https://lemehovskiy.github.io/{PROJECT_NAME}/test](https://lemehovskiy.github.io/{PROJECT_NAME}/test/)
 
 ### Browser support
 
