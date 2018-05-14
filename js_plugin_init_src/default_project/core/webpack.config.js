@@ -2,7 +2,8 @@ module.exports = {
     watch: true,
     entry: './src/{PROJECT_NAME}.es6',
     output: {
-        filename: 'build/{PROJECT_NAME}.js'
+        filename: 'build/{PROJECT_NAME}.js',
+        libraryTarget: "umd"
     },
     module: {
         rules: [

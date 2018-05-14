@@ -41,8 +41,11 @@ if (isset($options['init'])) {
 
         switch ($config['plugin_type']) {
             case 'canvas':
-
                 create_canvas_test_folder($config);
+                break;
+
+            case 'vanilla':
+                create_vanilla_test_folder($config);
                 break;
 
             default:
@@ -187,6 +190,46 @@ function create_canvas_test_folder($config)
     ));
 }
 
+
+function create_vanilla_test_folder($config)
+{
+    create_test_package_json($config);
+
+    create_folder('test/sass');
+
+    system('cp -r js_plugin_init_src/vanilla_project/test/sass ' . 'test');
+
+    system('cp js_plugin_init_src/default_project/test/webpack.config.js ' . 'test');
+
+
+    create_file_by_sample(array(
+        'sample_file' => "js_plugin_init_src/vanilla_project/test/index.es6",
+        'create_file' => 'test/index.es6',
+        'search_field' => array(
+            '{PLUGIN_CLASS}'
+        ),
+        'replace_field' => array(
+            $config['project_class']
+        )
+    ));
+
+
+    create_file_by_sample(array(
+        'sample_file' => "js_plugin_init_src/vanilla_project/test/index.html",
+        'create_file' => 'test/index.html',
+        'search_field' => array(
+            '{PROJECT_NAME}',
+            '{PROJECT_DESCRIPTION}',
+            '{PROJECT_KEYWORDS}',
+        ),
+        'replace_field' => array(
+            $config['project_name'],
+            $config['project_description'],
+            implode(" ", $config['project_keywords']),
+        )
+    ));
+}
+
 function create_readme_file($config)
 {
     $search_fields = array(
@@ -211,7 +254,15 @@ function create_readme_file($config)
 function create_core_package_json($config)
 {
 
-    $package_json = file_get_contents("js_plugin_init_src/default_project/core/package.json");
+    switch ($config['plugin_type']) {
+        case 'vanilla':
+            $package_json = file_get_contents("js_plugin_init_src/default_project/core/package.json");
+            break;
+
+        default:
+            $package_json = file_get_contents("js_plugin_init_src/vanilla_project/core/package.json");
+            break;
+    }
 
     $package_config = json_decode($package_json, true);
 
@@ -259,6 +310,10 @@ function create_main_js_file($config)
 
     if ($config["plugin_type"] == "canvas") {
         $sample_file = "js_plugin_init_src/canvas_project/core/plugin.es6";
+    }
+
+    else if ($config["plugin_type"] == "vanilla") {
+        $sample_file = "js_plugin_init_src/vanilla_project/core/plugin.es6";
     }
 
 
