@@ -255,12 +255,12 @@ function create_core_package_json($config)
 {
 
     switch ($config['plugin_type']) {
-        case 'vanilla':
-            $package_json = file_get_contents("js_plugin_init_src/default_project/core/package.json");
-            break;
+//        case 'vanilla':
+//            $package_json = file_get_contents("js_plugin_init_src/vanilla_project/core/package.json");
+//            break;
 
         default:
-            $package_json = file_get_contents("js_plugin_init_src/vanilla_project/core/package.json");
+            $package_json = file_get_contents("js_plugin_init_src/default_project/core/package.json");
             break;
     }
 
