@@ -2,7 +2,7 @@ require("./sass/style.scss");
 
 require ("jquery");
 
-require('../build/{PLUGIN_SLUG_UNDERSCORE}.js');
+require('../build/{PROJECT_NAME_DASHED}.js');
 
 
 $(document).ready(function () {
