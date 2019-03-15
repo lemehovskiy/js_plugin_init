@@ -1,10 +1,16 @@
+const path = require('path');
+const NODE_ENV = process.env.NODE_ENV || "development";
+
 module.exports = {
     watch: true,
+    mode: NODE_ENV,
     entry: './src/{PROJECT_NAME}.es6',
     output: {
-        filename: 'build/{PROJECT_NAME}.js',
+        path: path.resolve(__dirname, 'dist'),
+        filename: './{PROJECT_NAME}.js',
         libraryTarget: "umd"
     },
+
     module: {
         rules: [
             {
@@ -13,7 +19,7 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['env']
+                        presets: [ 'es2015', 'react', 'stage-2' ]
                     }
                 }
             }
